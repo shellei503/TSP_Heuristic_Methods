@@ -131,7 +131,7 @@ class AddHeuristicTSP:
 # ********************************************************************************
 
 if __name__ == '__main__':
-    df = pd.read_csv('city_data_add.csv')
+    df = pd.read_csv('city_data.csv')
     tsp = AddHeuristicTSP(df)
 
     tsp.final_df
@@ -141,3 +141,4 @@ if __name__ == '__main__':
 
     print("shortest_distance_final", tsp.shortest_distance)
     print("shortest_tour_final", tsp.shortest_tour)
+    print(pd.show_versions())
