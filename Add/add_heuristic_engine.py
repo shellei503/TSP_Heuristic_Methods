@@ -18,6 +18,7 @@ class AddHeuristicTSP:
         self._final_df = None
         self._shortest_distance = None
         self._shortest_tour = None
+        self._shortest_tour_leg_distances = None
 
     def find_subtour(self, starting_city):
         """ Given a starting city, finds a tour by selecting next shortest distance from list of unvisited cities """
@@ -31,6 +32,7 @@ class AddHeuristicTSP:
         total_distance = 0
         count = 0
 
+        # TODO move this to a utility function so it can be used in both heuristic methods
         while len(cities_unvisited) > 0:
             # remove any city that has already been visited from consideration
             df_unvisited = self.df[self.df['destination'].isin(cities_unvisited)]
@@ -110,8 +112,8 @@ class AddHeuristicTSP:
         if self._shortest_distance is None:
             return self._calculate_shortest_distance()
 
-    def _calculate_shortest_distance(self):  # find the tour with the lowest distance
-        index_min_final = self.final_df['distance'].idxmin()  # returns the index location of min value
+    def _calculate_shortest_distance(self):
+        index_min_final = self.final_df['distance'].idxmin()
         min_row_final = self.final_df.loc[index_min_final]
         return min_row_final.distance
 
@@ -122,23 +124,21 @@ class AddHeuristicTSP:
             return self._generate_shortest_tour()
 
     def _generate_shortest_tour(self):
-        index_min_final = self.final_df['distance'].idxmin()  # returns the index location of min value
+        index_min_final = self.final_df['distance'].idxmin()
         min_row_final = self.final_df.loc[index_min_final]
         return min_row_final.tour
 
+    @property
+    def shortest_tour_leg_distances(self):
+        """ Add description here"""
+        if self._shortest_tour_leg_distances is None:
+            return self._generate_shortest_tour_leg_distances()
 
-# ********************************************************************************
-# ********************************************************************************
+    def _generate_shortest_tour_leg_distances(self):
+        index_min_final = self.final_df['distance'].idxmin()
+        min_row_final = self.final_df.loc[index_min_final]
+        return min_row_final.tour_leg_distances
 
-if __name__ == '__main__':
-    df = pd.read_csv('city_data.csv')
-    tsp = AddHeuristicTSP(df)
 
-    tsp.final_df
-    print("final_df")
-    print(tsp.final_df)
-    print()
 
-    print("shortest_distance_final", tsp.shortest_distance)
-    print("shortest_tour_final", tsp.shortest_tour)
-    print(pd.show_versions())
+
